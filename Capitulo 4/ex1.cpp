@@ -1,0 +1,47 @@
+#include <iostream>
+
+enum WeekDay {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
+enum Month{JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER};
+int monthDays[]={31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const int LEAP_YEAR_FEBRUARY_DAYS = 29;
+const char* monthName[] = {"Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+
+bool leapYear(int year){
+    return (year % 4==0) && (year % 100 != 0) || (year % 400 == 0);
+}
+
+int yearMonthToYearDay (int year, int month){
+    int n=0;
+    for (int m = JANUARY; m < month; ++m)
+            if (m==FEBRUARY && leapYear(year))
+                n+= LEAP_YEAR_FEBRUARY_DAYS;
+            else
+                n +=monthDays[m];
+    return n;
+}
+
+WeekDay yearToWeekDay(int year){
+    int wd, y;
+    for (wd = MONDAY, y=2; y <= year; ++y)
+            wd = (wd + (leapYear(y-1)?2:1)%7);
+    return (WeekDay) wd;
+}
+
+
+WeekDay yearMonthToWeekDay(int year, int month){
+    WeekDay weekDay = yearToWeekDay(year);
+    int yearDay = yearMonthToYearDay(year,month);
+    return WeekDay((int(weekDay)+yearDay)%7);
+}
+
+int main(){
+    int year;
+    std::cout << "Qual o ano em que esta interessado? ";
+    std::cin >> year;
+    std::cout << "No ano de " << year << " ocorre sexta feira 13 no(s) mes(es) de:\n";
+    for (int month=JANUARY; month <= DECEMBER; ++month)
+        if (yearMonthToWeekDay(year, month) == SUNDAY)
+            std::cout << ' ' << monthName[month];
+    std::cout << std::endl;
+    return 0;
+}
