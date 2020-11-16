@@ -97,7 +97,7 @@ int main(){
 
         vez = (vez == 'X'?'O':'X');
 
-    }while (numJogada < POSICOES);
+    }while (++numJogada < POSICOES);
 
     std::cout << "Jogo Empatado" << std::endl;
     return 0;
