@@ -75,11 +75,11 @@ void show(int v[], int n){
     }
     std::cout << std::endl;
 }
-
 int compar (const void * p1, const void * p2){
     contar++;
     return * (int*)p1-*(int *)p2;
 }
+
 
 int main(){
     int arr[DIM], escolha, desemp, c[DIM];
