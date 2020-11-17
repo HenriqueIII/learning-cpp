@@ -13,5 +13,7 @@ int main(){
         if (d.getWeekDay() == FRIDAY)
             std::cout << d.getMonthName()<<' ';
     }
-    std::cout << d.getNormDate();
+    d.setMonth(8);
+    d.setDay(1);
+    std::cout << "data: " << d.getNormDate();
 }

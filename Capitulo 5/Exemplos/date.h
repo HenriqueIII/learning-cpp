@@ -1,4 +1,3 @@
-#include <cstdlib>
 enum WeekDay {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY, INVALID};
 static const int DAYS_OF_ONE_WEEK = 7;
 
@@ -54,7 +53,6 @@ public:
 
     const char * getNormDate(char);
 };
-
 char * toStr(int val, int len){
     char str[len];
     static char *ptr = str+len;
@@ -73,7 +71,6 @@ char * toStr(int val, int len){
     while(len--){
         *--ptr='0';
     }
-
     return ptr;
 }
 WeekDay Date::getWeekDay(){
@@ -122,22 +119,10 @@ WeekDay Date::getYearWeekDay(){
     return WeekDay (d%DAYS_OF_ONE_WEEK);
 }
 const char * Date::getNormDate(char sep='/'){
-    char datestr[12];
-    char * res = datestr + 12;
-    *--res=0;
     char *yStr = toStr(year,5);
-    for (int i = 3; i>=0; --i)
-        *--res=yStr[i];
-    *--res=sep;
     char *mStr = toStr(month,3);
-    for (int i = 1; i>=0; --i)
-        *--res=mStr[i];
-    *--res=sep;
-    /*char *dStr = toStr(day,3);
-    for (int i = 0; i>=0; --i)
-        *--res=dStr[0];*/
-
-    for(int i=0;i<12;i++)
-        std::cout << datestr[i]<<std::endl;
+    char *dStr = toStr(day,3);
+    char datestr[]={dStr[0],dStr[1],sep,mStr[0],mStr[1],sep,yStr[0],yStr[1],yStr[2],yStr[3],0};
+    char * res = datestr;
     return res;
 }
