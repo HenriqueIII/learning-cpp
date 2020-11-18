@@ -55,7 +55,6 @@ public:
 
     int concat (char *, const char *, int);
 };
-
 char * toStr(int val, int len){
     const int MAX_BUF = sizeof(int)*8+1;
     static char str[MAX_BUF];
@@ -76,7 +75,6 @@ char * toStr(int val, int len){
     }
     return ptr;
 }
-
 WeekDay Date::getWeekDay(){
     if (yearWeekDay == INVALID)
         yearWeekDay = getYearWeekDay();
@@ -122,7 +120,6 @@ WeekDay Date::getYearWeekDay(){
         d+=leapYear(y)?2:1;
     return WeekDay (d%DAYS_OF_ONE_WEEK);
 }
-
 int Date::concat(char * s1, const char * s2, int p){
     //Dado a posição p, concatena s2 a s1 a partir de p.
     char * q = (char*)s2;
@@ -134,7 +131,6 @@ int Date::concat(char * s1, const char * s2, int p){
     }
     return i;
 }
-
 const char * Date::getNormDate(const char * sep="/"){
     //Retorna a data normalizada dd/mm/aaaa.
     //O separador podera ser diferente.
