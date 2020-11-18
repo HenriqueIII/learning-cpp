@@ -51,13 +51,16 @@ public:
 
     const char * getWeekDayName();  //retornar o nome do dia da semana
 
-    const char * getNormDate(char);
+    const char * getNormDate(const char*);
+
+    int concat (char *, const char *, int);
 };
+
 char * toStr(int val, int len){
-    char str[len];
-    static char *ptr = str+len;
+    const int MAX_BUF = sizeof(int)*8+1;
+    static char str[MAX_BUF];
+    char *ptr = str+MAX_BUF;
     *--ptr=0;
-    --len;
     if (val>0)
         do{
             *--ptr = val%10+'0';
@@ -73,6 +76,7 @@ char * toStr(int val, int len){
     }
     return ptr;
 }
+
 WeekDay Date::getWeekDay(){
     if (yearWeekDay == INVALID)
         yearWeekDay = getYearWeekDay();
@@ -118,11 +122,33 @@ WeekDay Date::getYearWeekDay(){
         d+=leapYear(y)?2:1;
     return WeekDay (d%DAYS_OF_ONE_WEEK);
 }
-const char * Date::getNormDate(char sep='/'){
-    char *yStr = toStr(year,5);
-    char *mStr = toStr(month,3);
-    char *dStr = toStr(day,3);
-    char datestr[]={dStr[0],dStr[1],sep,mStr[0],mStr[1],sep,yStr[0],yStr[1],yStr[2],yStr[3],0};
-    char * res = datestr;
+
+int Date::concat(char * s1, const char * s2, int p){
+    //Dado a posição p, concatena s2 a s1 a partir de p.
+    char * q = (char*)s2;
+    while(*q++);
+    int lens2 = q - s2 - 1;
+    int i=p;
+    for (int j=0; j<lens2; ++i, ++j){
+        s1[i] = s2[j];
+    }
+    return i;
+}
+
+const char * Date::getNormDate(const char * sep="/"){
+    //Retorna a data normalizada dd/mm/aaaa.
+    //O separador podera ser diferente.
+
+    static char datestr[11];
+    char * res = datestr+11;
+    char *dStr = toStr(day,2);
+    int p = concat(res, dStr, 0);
+    p = concat(res, sep, p);
+    char *mStr = toStr(month,2);
+    p = concat(res, mStr, p);
+    p = concat(res, sep, p);
+    char *yStr = toStr(year,4);
+    p = concat(res, yStr, p);
+    res[p+1]=0;
     return res;
 }
