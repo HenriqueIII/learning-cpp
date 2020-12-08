@@ -21,13 +21,13 @@ private:
 
 public:
 
-    Date(int y = 1998, int m = 1, int d = 1){   //construtor
-        setYear(y);
-        setMonth(m);
-        setDay(d);
+    Date(int y = 0, int m = 0, int d = 0){  //construtor default
+        setYear((y?y:getYearToday()));
+        setMonth((m?m:getMonthToday()));
+        setDay((d?d:getDayToday()));
     }
 
-    Date(char * datastr, char sep='/'){         //construtor
+    Date(const char * datastr, char sep='/'){         //construtor string (formato dd/mm/aaaa)
         int y=0,m=0,d=0;
         for (int i=0; *datastr != sep; *datastr++){
             (d*=10)+=(*datastr-'0');
@@ -72,7 +72,11 @@ public:
     const char * getNormDate(const char*);
 
     int concat (char *, const char *, int);
+    int getYearToday();
+    int getMonthToday();
+    int getDayToday();
 };
+
 char * toStr(int val, int len){
     const int MAX_BUF = sizeof(int)*8+1;
     static char str[MAX_BUF];
