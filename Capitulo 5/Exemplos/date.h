@@ -27,6 +27,12 @@ public:
         setDay(d);
     }
 
+    Date(const char * datastr){
+        int ano;
+        int mes;
+        int dia;
+    }
+
     void setYear(int y){            //afectar o ano
         year = y;
         yearWeekDay = INVALID;
