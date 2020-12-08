@@ -27,10 +27,22 @@ public:
         setDay(d);
     }
 
-    Date(const char * datastr){
-        int ano;
-        int mes;
-        int dia;
+    Date(char * datastr, char sep='/'){         //construtor
+        int y=0,m=0,d=0;
+        for (int i=0; *datastr != sep; *datastr++){
+            (d*=10)+=(*datastr-'0');
+        }
+        *datastr++;
+        for (int i=0; *datastr!=sep; *datastr++){
+            (m*=10)+=(*datastr-'0');
+        }
+        *datastr++;
+        for (int i=0; *datastr; *datastr++){
+            (y*=10)+=(*datastr-'0');
+        }
+        setDay(d);
+        setMonth(m);
+        setYear(y);
     }
 
     void setYear(int y){            //afectar o ano

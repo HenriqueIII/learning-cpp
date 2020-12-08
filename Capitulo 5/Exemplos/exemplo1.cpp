@@ -7,6 +7,7 @@ int main(){
     std::cout << "Qual o ano em que esta interessado? ";
     std::cin >> year;
     Date d(year, 1, 13);
+    Date d2("1/1/2001");
     std::cout << "No ano de " << year << " ocorre sexta feira 13 no(s) mes(es) de: " << std::endl;
     for (int month = 1; month <= 12 ; ++ month){
         d.setMonth(month);
@@ -15,5 +16,5 @@ int main(){
     }
     d.setMonth(1);
     d.setDay(1);
-    std::cout << "data: " << d.getNormDate();
+    std::cout << "data: " << d2.getNormDate();
 }
