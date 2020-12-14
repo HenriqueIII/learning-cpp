@@ -3,22 +3,17 @@ static const int DAYS_OF_ONE_WEEK = 7;
 
 class Date{
 private:
-
     unsigned int year;          //ano
     unsigned char month, day;   //Mês e dia do ano
     int yearDay;                //Numero de dias desde 1 de Janeiro
                                 //-1 indica que ainda nao foi calculado.
     WeekDay yearWeekDay;        //Dia da semana de 1 de Janeiro.
                                 //INVALID indica que nao foi calculado
-
     bool leapYear(int y){       //Ano Bissexto
         return (y % 4 == 0) && (y % 100) || (y % 400 == 0);
     }
-
     int getYearDay();
-
     WeekDay getYearWeekDay(); //Dia da semana de 1 de Janeiro.
-
 public:
 
     Date(int y = 0, int m = 0, int d = 0){  //construtor default
@@ -26,7 +21,6 @@ public:
         setMonth((m?m:getMonthToday()));
         setDay((d?d:getDayToday()));
     }
-
     Date(const char * datastr, char sep='/'){         //construtor string (formato dd/mm/aaaa)
         int y=0,m=0,d=0;
         for (int i=0; *datastr != sep; *datastr++){
@@ -44,38 +38,34 @@ public:
         setMonth(m);
         setYear(y);
     }
-
     void setYear(int y){            //afectar o ano
         year = y;
         yearWeekDay = INVALID;
         yearDay = -1;
     }
-
     void setMonth(int m){           //afectar o mes
         month = m;
         yearDay = -1;
     }
-
     void setDay(int d){             //afectar o dia
         if(yearDay!=-1)
             yearDay +=d -day;
 
         day=d;
     }
-
     WeekDay getWeekDay();           //retornar o dia da semana
-
     const char * getMonthName();    //retornar o nome do mes
-
     const char * getWeekDayName();  //retornar o nome do dia da semana
-
     const char * getNormDate(const char*);
-
+    long getDays(Date) const;
+    long subNorm(Date);
+    int cmp(const Date &) const;
     int concat (char *, const char *, int);
     int getYearToday();
     int getMonthToday();
     int getDayToday();
 };
+
 
 char * toStr(int val, int len){
     const int MAX_BUF = sizeof(int)*8+1;
@@ -169,4 +159,29 @@ const char * Date::getNormDate(const char * sep="/"){
     p = concat(res, yStr, p);
     res[p+1]=0;
     return res;
+}
+long Date::getDays(Date other) const{ // TODO
+    return 0;
+}
+long Date::subNorm( Date less ){ // subtração normalizada entre duas datas em que *this >= less
+    if ( less.year == year )
+        return getYearDay() - less.getYearDay();
+
+    //numero de dias até ao fim do ano da menor das datas
+    long days = 365 + leapYear(less.year) - less.getYearDay();
+
+    //somatorio da diferença de anos em dias
+    for (int y=less.year+1; y<year;++ y){
+        days += 365 + leapYear(y);
+    }
+
+    //numero de dias até ao fim do ano da maior.
+    return days + getYearDay();
+}
+int Date::cmp(const Date &other) const{ //comparação entre duas datas.
+    if(year != other.year)
+        return year - other.year;
+    if (month != other.month)
+        return month - other.month;
+    return day - other.day;
 }

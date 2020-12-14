@@ -37,4 +37,7 @@ int main(){
     std::cout << "data: " << d2.getNormDate() << std::endl;
     std::cout << "data 3: " << d3.getNormDate() << std::endl;
     for (int i=0; i<10; std::cout << "Data " << i << " : " << dateVect[i++].getNormDate() << std::endl);
+    std::cout << std::endl;
+    std::cout << d2.getNormDate() << " comparado a " << d3.getNormDate() << " retorna " << d2.cmp(d3) << std::endl;
+    std::cout << d3.getNormDate() << " - " << d2.getNormDate() << " = " << d3.subNorm(d2) << " dias." << std::endl;
 }
