@@ -20,6 +20,40 @@ UIntSet::UIntSet(u_int * pu, u_int n){
 void UIntSet::insert(u_int elem){
     vect[elem >> 3] |= 1 << (elem & 0x07);
 
+    /********************************************************
+    *   Exemplo: inserir o numero 32 001 no set             *
+    *   vect[32001 >> 3] |= 1 << (32001 & 0x07)             *
+    *                                                       *
+    *   32.000 base 2 = 0111 1101 0000 0001                 *
+    *   32.000 >> 3 = 0000 1111 1010 0000 = 4000            *
+    *   vect[4000] = 0000 0000                              *
+    *                                                       *
+    *   32.000 & 0x07 =                                     *
+    *   0111 1101 0000 0001                                 *
+    *  &0000 0000 0000 0111                                 *
+    *   --------------------                                *
+    *   0000 0000 0000 0001                                 *
+    *                                                       *
+    *   1 << 0000 0000 0000 0001 =                          *
+    *   0000 0000 0000 0010                                 *
+    *                                                       *
+    *   vect[4000]|=0000 0000 0000 0010                     *
+    *   se ainda nao tiverem sido introduzidos nums         *
+    *   o vect[4000]=0000 0000                              *
+    *                                                       *
+    *   0000 0000                                           *
+    *  |0000 0010                                           *
+    *   ---------                                           *
+    *   0000 0010                                           *
+    *                                                       *
+    *   ou seja, quando o byte 4000 tiver o 2 bit a "1"     *
+    *   quer dizer que o numero 32.001 pertence ao conjunto *
+    *                                                       *
+    *                                                       *
+    ********************************************************/
+
+
+
     /*  É equivalente a:
         u_byte b = elem / 8;    //Indice do byte a afectar
         u_char sh = elem % 8;   //Indice do bit dentro do bit
