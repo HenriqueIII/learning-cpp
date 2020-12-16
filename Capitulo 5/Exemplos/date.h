@@ -53,11 +53,18 @@ public:
 
         day=d;
     }
+    int getDay() const{
+        return day;
+    }
+    int getYear() const{
+        return year;
+    }
+
     WeekDay getWeekDay();           //retornar o dia da semana
     const char * getMonthName();    //retornar o nome do mes
     const char * getWeekDayName();  //retornar o nome do dia da semana
     const char * getNormDate(const char*);
-    long getDays(Date) const;
+    long getDays(Date);
     long subNorm(Date);
     int cmp(const Date &) const;
     int concat (char *, const char *, int);
@@ -160,8 +167,11 @@ const char * Date::getNormDate(const char * sep="/"){
     res[p+1]=0;
     return res;
 }
-long Date::getDays(Date other) const{ // TODO
-    return 0;
+long Date::getDays(Date other){
+    if (cmp (other) > 0){
+        return subNorm(other);
+    }
+    return -other.subNorm(*this);
 }
 long Date::subNorm( Date less ){ // subtração normalizada entre duas datas em que *this >= less
     if ( less.year == year )

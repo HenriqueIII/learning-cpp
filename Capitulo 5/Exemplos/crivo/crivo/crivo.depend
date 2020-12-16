@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1608148180 source:c:\users\paulo\documents\github\learning-cpp\capitulo 5\exemplos\uintset.cpp
+	<iostream>
+	<cstring>
+	"uintset.h"
+
+1608147340 c:\users\paulo\documents\github\learning-cpp\capitulo 5\exemplos\uintset.h
+
+1608149152 source:c:\users\paulo\documents\github\learning-cpp\capitulo 5\exemplos\exemplo16.cpp
+	"uintset.h"
+	<iostream>
+
