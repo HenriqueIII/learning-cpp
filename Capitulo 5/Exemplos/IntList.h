@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cassert>
+
 class IntList{
 
     struct IntNode{                 //Classe interna para os nós da lista
@@ -22,7 +25,7 @@ public:
     bool contain(int val) const;//Testar se existe val.
     void display() const;       //Apresenta os elementos
     bool isEmpty() const{       //Testar se a lista esta vazia
-        return ptList==NULL
+        return ptList==NULL;
     }
     void removeAll();           //Remover todos os elementos
 };
