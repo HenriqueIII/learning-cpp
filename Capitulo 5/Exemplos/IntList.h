@@ -36,6 +36,61 @@ bool IntList::contain(int val) const{
 }
 
 bool IntList::find(int val, IntNode* & prev, IntNode* & next) const {
+
+    for(next = ptList, prev = NULL;
+        next && next -> data < val;
+        prev = next, next = next ->ptNext);
+
+    return next && next->data == val;
 }
 
+bool IntList::insertNode(int val){
+    IntNode *prev, *next;
+    if (find(val, prev, next)){
+        return false;   // se existe não insere
+    }
+    IntNode * n = new IntNode(val); // Reserva a memoria
+    if (prev == NULL)
+        ptList = n;
+    else
+        prev -> ptNext = n;
 
+    n -> ptNext = next;
+    return true;
+}
+
+bool IntList::removeNode(int val){
+    IntNode *prev, *next;
+    if ( !find(val, prev, next))
+        return false;   // Se nao existe retorna
+
+    if (prev == NULL)
+        ptList = next -> ptNext;
+    else
+        prev -> ptNext = next -> ptNext;
+    delete next;
+    return true;
+}
+
+// Remover o primeiro IntNode, retornando o seu valor
+int IntList::removeHead(){
+    assert(ptList);             // ptList deve ser diferente de NULL
+    IntNode * first = ptList;
+    int n = first -> data;      //Valor do primeiro IntNode
+    ptList = first -> ptNext;   //Desliga o IntNode da cabeça
+    delete first;               //Liberta a memória
+    return n;                   //Retorna o valor
+}
+
+//Remover todos os nós
+void IntList::removeAll(){
+    while(!isEmpty())
+        removeHead();
+}
+
+//Mostrar os valores dos elementos numa linha de texto
+void IntList::display() const{
+    for(IntNode * pt = ptList;pt;pt=pt->ptNext)
+        std::cout << pt -> data << ' ';
+    std::cout << std::endl;
+}
