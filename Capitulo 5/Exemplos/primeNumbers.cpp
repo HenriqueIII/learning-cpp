@@ -17,7 +17,7 @@ int main(int argc, char ** argv){
             std::cout << std::setw(7) << i;
             num++;
         }
-        if(num%21==0){
+        if(num%19==0){
             num=1;
             std::cout << std::endl;
         }

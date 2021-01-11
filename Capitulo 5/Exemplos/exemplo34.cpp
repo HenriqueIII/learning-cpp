@@ -13,7 +13,7 @@
 
 int main(int argc, char ** argv){
     IntSet crivo;
-    const int n = 5000;
+    const int n = 100000;
     int maxcheck = roundf(sqrt(n));
     for (int i = 2; i <= n; i++)
         crivo.insertN(i);
