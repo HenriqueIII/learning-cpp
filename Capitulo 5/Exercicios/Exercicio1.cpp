@@ -43,8 +43,8 @@ int main(int argc, char ** argv){
     d7.displayDate();
     std::cout << std::endl;
     d2.displayDate();
-    std::cout << "-";
+    std::cout << " - ";
     d3.displayDate();
-    std::cout << "=" << d2.subNorm(d3);
+    std::cout << " = " << d2.subNorm(d3)  << " dias." << std::endl;
     return 0;
 }
