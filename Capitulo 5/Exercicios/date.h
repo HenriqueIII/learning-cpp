@@ -27,7 +27,16 @@ private:
     int getYearDay();
     WeekDay getYearWeekDay(); //Dia da semana de 1 de Janeiro.
 public:
-
+    Date(const Date & other){
+        setYear(other.getYear());
+        setMonth(other.getMonth());
+        setDay(other.getDay());
+    }
+    void operator=(const Date & other){
+        setYear(other.getYear());
+        setMonth(other.getMonth());
+        setDay(other.getDay());
+    }
     Date(int y = 0, int m = 0, int d = 0){  //construtor default
         setYear((y?y:getYearToday()));
         setMonth((m?m:getMonthToday()));
@@ -56,6 +65,9 @@ public:
     }
     int getYear() const{
         return year;
+    }
+    int getMonth() const{
+        return month;
     }
     WeekDay getWeekDay();           //retornar o dia da semana
     const char * getMonthName();    //retornar o nome do mes
@@ -213,6 +225,14 @@ bool Date::validDate(const char * str){
     }
     if(members!=3)
         return false;
+    
+    for (int i = 0; i<3; ++i){
+        for (int j = 0; j < strlen(tok[i]); j++)
+            if (!isdigit(*tok[i])){
+                std::cout << "A data contem caracteres nao suportados. E' tudo numero?" << std::endl;
+                return false;
+            }
+    }
 
     if( strlen(tok[0])!=4 || strlen(tok[1])>2 || strlen(tok[2]) > 2){
         std::cout << "A data deverá ser YYYY-MM-DD" << std::endl;
@@ -261,4 +281,9 @@ Date Date::yesterday(){
         d = MONTHDAYS[m-1]+(m==2?(leapYear(year)?1:0):0);
     }
     return Date(y,m,d);
+}
+
+bool validateDate(char * datastr){
+    Date test;
+    return test.validDate(datastr);
 }
