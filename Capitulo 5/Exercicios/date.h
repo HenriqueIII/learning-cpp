@@ -44,6 +44,21 @@ public:
     }
 
     Date(const char * str);
+    
+    Date(long days){
+        int d=0, m=0, y=0;
+        while(days-365+leapYear(y)>0){
+                days-=365+leapYear(y);
+                y++;
+        }
+        while((days-=(MONTHDAYS[m]+(m+1==2?leapYear(y):0)))>0)
+            m++;
+
+        d = -days;
+        setYear(y);
+        setMonth(m);
+        setDay(d);
+    }
 
     void setYear(int y){            //afectar o ano
         year = y;
@@ -215,7 +230,7 @@ bool Date::isLess(const Date & testdate)const{
 bool Date::validDate(const char * str){
     int members=0;
     char * tok[3];
-    char strcopy[strlen(str)];
+    char strcopy[strlen(str)+1];
     strcpy(strcopy, str);
     char * token = strtok(strcopy, sep);
     while(token){
@@ -226,13 +241,12 @@ bool Date::validDate(const char * str){
     if(members!=3)
         return false;
     
-    for (int i = 0; i<3; ++i){
-        for (int j = 0; j < strlen(tok[i]); j++)
-            if (!isdigit(*tok[i])){
-                std::cout << "A data contem caracteres nao suportados. E' tudo numero?" << std::endl;
+    for (int i = 0; i<3; ++i)
+        for (int j=0; j < strlen(tok[i]);j++)
+            if(!isdigit(tok[i][j])){
+                std::cout << "A data contem caracteres nao suportados. \""<< tok[i][j] << "\"." << std::endl;
                 return false;
             }
-    }
 
     if( strlen(tok[0])!=4 || strlen(tok[1])>2 || strlen(tok[2]) > 2){
         std::cout << "A data deverá ser YYYY-MM-DD" << std::endl;

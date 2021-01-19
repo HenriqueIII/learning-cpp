@@ -4,11 +4,11 @@
 
 typedef unsigned char tinyint;
 typedef tinyint * TimePtr; 
-const char sep[]=":";
+const char sep_h[]=":";
 
 class Time{
     //hour < 24;minute < 60;second < 60
-    tinyint hour, minute, second;
+    tinyint hour=0, minute=0, second=0;
     //operador = exclusivo para uso dentro da classe.
     void operator=(const Time & t){
         hour = t.hour;
@@ -26,6 +26,7 @@ public:
     Time(const char * s);
     //Afectar os atributos recebendo uma string formatada
     void setTime(const char * s);
+    void setTime(const Time &);
     void setHour(int);
     void setMinute(int);
     void setSecond(int);
@@ -33,11 +34,13 @@ public:
     unsigned getMinute() const;
     unsigned getSecond() const;
     //Mostrar o valor na forma de string formatada
-    void printOn() const;
+    void printOn();
     //Retorna a diferença de tempo em segundos
     int theTimeBetween(Time&);
     bool isEqual(const Time&) const; // Retorna TRUE se forem iguais
     bool isLessThan(const Time & t); // Retorna TRUE se *this for menor que t
+    bool isValid(char *);
+
 };
 //função que retorna o tempo actual em objecto Time
 Time getNow(){
@@ -49,10 +52,10 @@ Time getNow(){
     return Time(h,m,s);
 }
 //função para colocar um '0' a frente dos numeros quando menores que 10
-char *  toStr(tinyint c){ 
-    int n=c;
-    char str[3];
-    char *ptr = str+3;
+char *  toStr(unsigned c){ 
+    int n=c, size=5;
+    char str[5];
+    char *ptr = str+size;
     *--ptr=0;
     do{
         *--ptr=(n%10)+'0';
@@ -99,7 +102,7 @@ Time::Time(const char * s){
     /*Inicializa *tok com o primeiro valor 'hh'
     * Enquanto existir tokens corre o loop
     * Afeta *tok com os restantes tokens ('mm' e 'ss')*/
-    for(tok = strtok(timestr, sep);tok;tok=strtok(NULL, sep),i++){
+    for(tok = strtok(timestr, sep_h);tok;tok=strtok(NULL, sep_h),i++){
         *Timearr[i] = atoi(tok);//Afecta as variaveis hour,minute e second com o valor do token.
     }
 }
@@ -116,6 +119,11 @@ Time::Time(long seconds){
 //Afeta o objecto com a string(hh:mm:ss)
 void Time::setTime(const char * s){
     *this=Time(s);
+}
+void Time::setTime(const Time & t){
+    hour=t.hour;
+    minute=t.minute;
+    second=t.second;
 }
 
 void Time::setHour(int h){
@@ -146,8 +154,8 @@ inline unsigned int Time::getMinute() const{
 inline unsigned int Time::getSecond() const{
     return second;
 }
-inline void Time::printOn() const{
-    std::cout << toStr(hour) << ':' << toStr(minute) << ':' << toStr(second) << std::endl;
+void Time::printOn(){
+    std::cout << toStr(hour) << ':' << toStr(minute) << ':' << toStr(second);
 }
 int Time::theTimeBetween(Time & t){
     if(isLessThan(t))
@@ -175,4 +183,37 @@ int Time::subNorm(Time & t){
     minutes+=hours*60;
     seconds+=minutes*60;
     return seconds;
+}
+bool Time::isValid(char * s){
+    char str[strlen(s)+1];
+    strcpy(str,s);
+
+    int members=0;
+    char * tok[3];
+    char * token=strtok(str,sep_h);
+    while(token){
+        tok[members]=token;
+        members++;
+        token=strtok(NULL,sep_h);
+    }
+
+    if(members!=3)
+        return false;
+
+    for (int i = 0; i<3; ++i)
+        for (int j=0; j < strlen(tok[i]);j++)
+            if(!isdigit(tok[i][j])){
+                std::cout << "A hora contem caracteres nao suportados. \""<< tok[i][j] << "\"." << std::endl;
+                return false;
+            }
+    
+    if(strlen(tok[0])>2 || strlen(tok[1])>2 || strlen(tok[2])>2)
+        return false;
+
+    return true;
+
+}
+
+bool validateTime(char * s){
+    return (Time().isValid(s)?true:false);
 }

@@ -43,5 +43,4 @@ int main(int argc, char ** argv){
     std::cout << "t4.theTimeBetween(t3): ";
     std::cout << t4.theTimeBetween(t3) << std::endl;
     return 0;
-
 }
