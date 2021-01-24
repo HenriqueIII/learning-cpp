@@ -16,7 +16,7 @@ class Time{
         second = t.second;
     }
     //subtracao normalizada entre horas, retorna em segundos a diferença
-    int subNorm(Time &);
+    int subNorm(const Time &);
 public:
     Time(); //Iniciar com o tempo corrente do sistema
     Time(int hours, int minutes=0, int seconds=0);
@@ -36,7 +36,7 @@ public:
     //Mostrar o valor na forma de string formatada
     void printOn();
     //Retorna a diferença de tempo em segundos
-    int theTimeBetween(Time&);
+    int theTimeBetween(const Time&);
     bool isEqual(const Time&) const; // Retorna TRUE se forem iguais
     bool isLessThan(const Time & t); // Retorna TRUE se *this for menor que t
     bool isValid(char *);
@@ -157,10 +157,13 @@ inline unsigned int Time::getSecond() const{
 void Time::printOn(){
     std::cout << toStr(hour) << ':' << toStr(minute) << ':' << toStr(second);
 }
-int Time::theTimeBetween(Time & t){
-    if(isLessThan(t))
-        return subNorm(t);
-    return -t.subNorm(*this);
+int Time::theTimeBetween(const Time & t){
+    Time t1(*this);
+    Time t2(t);
+
+    if(t1.isLessThan(t2))
+        return t1.subNorm(t2);
+    return -t2.subNorm(t1);
 }
 bool Time::isEqual(const Time & t) const{
     if (hour==t.hour && minute==t.minute && second==t.second)
@@ -176,7 +179,7 @@ bool Time::isLessThan(const Time & t){
         return true;
     return false;       
 }
-int Time::subNorm(Time & t){
+int Time::subNorm(const Time & t){
     int seconds = t.second - second;
     int minutes = t.minute - minute;
     int hours = t.hour - hour;

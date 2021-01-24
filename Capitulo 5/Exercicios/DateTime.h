@@ -2,6 +2,7 @@
 #include "Time.h"
 #include <iostream>
 #include <cstring>
+#include <iomanip>
 
 //separadores
 const char seps[]=".:/-";
@@ -14,6 +15,8 @@ class DateTime{
         __date=dt.__date;
         __time.setTime(dt.__time);
     }
+    //Função para ordenar as datas
+    void arrange(DateTime *&, DateTime *&);
 public:
     DateTime(unsigned y, unsigned m, unsigned d, unsigned h, unsigned min, unsigned s);
     DateTime(const Date &,const Time &);
@@ -131,18 +134,64 @@ void DateTime::printOn(){
     __time.printOn();
 }
 //Funções de comparação
-DateTime DateTime::theTimeBetween(DateTime & dt){
-    int secs_dif=__time.theTimeBetween(dt.__time);
-    long days_dif=__date.getDays(dt.__date);
-    if (secs_dif < 0)
-        secs_dif = -secs_dif;
-    if (days_dif < 0)
-        days_dif = -days_dif;
-    Date date_dif(days_dif);
-    Time time_dif("00:00:00");
-    if (isLess(dt))
-        time_dif.setTime(Time((long)secs_dif));
-    return DateTime(date_dif, time_dif);
+DateTime DateTime::theTimeBetween(DateTime & other){
+    int d=0, m=0, y=0;
+    //copiar as datas para nao afectar os objectos passados
+    DateTime dt1(*this);
+    DateTime dt2(other);
+    //ordenar a data
+    DateTime *__init=&dt1;
+    DateTime *__end=&dt2;
+    arrange(__init,__end);
+    //declarar variaveis auxiliares para ajudar nos algortimos    
+    Date aux = __init->__date;  //Iniciar uma data começando na data menor
+    Time t = __init->__time;    //Iniciar um tempo com o tempo da data menor
+    //contar o numero de anos
+    while(aux.getYear() != __end->getData().getYear()){ //incrementa ano da data até serem iguais
+        aux.opYear('+');    //Equivale a aux.setYear(aux.getYear()+1)
+        y++;                //incrementa o contador de anos para devolver no futuro
+    }
+    //teste para saber se o ultimo ano foi completo
+    if (aux.getMonth() > __end->getData().getMonth() ||
+    (aux.getMonth() == __end->getData().getMonth() && 
+    aux.getDay() > __end->getData().getDay())){
+        y--;
+        aux.opYear('-');
+    }
+    //contar o numero de meses restantes
+    while (aux.getYear() < __end->getData().getYear() || aux.getMonth() != __end->getData().getMonth()){
+        aux.opMonth('+');
+        m++;
+    }
+    //teste para saber se o mês foi completo
+    if(aux.getDay() > __end->getData().getDay()){
+        m--;
+        aux.opMonth('-');
+    }
+    //contar o numero de dias
+    while (aux.isLess(__end->getData())){
+        d++;
+        aux = aux.tomorrow();
+    }
+    //testar se passou um dia completo
+    if(__end->getTime().isLessThan(t))
+        d--;
+    aux.setDay(d);
+    aux.setMonth(m);
+    aux.setYear(y);
+    //calcular o tempo
+    long secs_between=t.theTimeBetween(__end->getTime());
+    Time dif(secs_between);
+    return DateTime(aux,dif);
+}
+void DateTime::arrange(DateTime *&dt1, DateTime *&dt2){
+    if(dt2->isLess(*dt1)){
+        DateTime aux(*dt2);
+        dt2->setData(dt1->__date);
+        dt2->setTime(dt1->__time);
+        dt1->setData(aux.__date);
+        dt1->setTime(aux.__time);
+    } 
 }
 bool DateTime::isEqual(DateTime & dt){
     if(__date.isEqual(dt.__date) && __time.isEqual(dt.__time))
@@ -150,8 +199,9 @@ bool DateTime::isEqual(DateTime & dt){
     return false;
 }
 bool DateTime::isLess(DateTime & dt){
-    if(__date.isLess(dt.__date) || __date.isEqual(dt.__date))
-        if(__time.isLessThan(dt.__time))
+    if(__date.isLess(dt.__date))
+        return true;
+    if(__date.isEqual(dt.__date) && __time.isLessThan(dt.__time))
             return true;
     return false;
 }

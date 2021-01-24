@@ -105,7 +105,15 @@ public:
     int theDaysBetween(const Date & testdate);
     Date tomorrow();
     Date yesterday();
+
+    /** operações sobre datas 
+    *   @param char c = op(+/-)
+    */
+    void opYear(char c);
+    void opMonth(char c);
+    void opDay(char c);
 };
+
 Date::Date(const char * str){
     if (!validDate(str)){
         std::cout << "Data Invalida. Afetando com default(hoje)" << std::endl;
@@ -300,4 +308,61 @@ Date Date::yesterday(){
 bool validateDate(char * datastr){
     Date test;
     return test.validDate(datastr);
+}
+
+void Date::opYear(char c){
+    int y = year;
+    switch(c){
+        case '+':
+            y++;
+            break;
+        case '-': 
+            y--;
+            break;
+        default:
+            break;
+    }
+    setYear(y);
+}
+
+void Date::opMonth(char c){
+    int m = month;
+    switch(c){
+        case '+':
+            m++;
+            if (m > 12){
+                m=1;
+                year++;
+            }
+            break;
+        case '-': 
+            m--;
+            if (m < 1){
+                m=12;
+                year--;
+            }
+            break;
+        default:
+            break;
+    }
+    setMonth(m);
+}
+void Date::opDay(char c){
+    int num_days=MONTHDAYS[month-1]+(month==2?leapYear(year):0);
+    int d=day;
+    switch(c){
+        case '+':
+            d++;
+            if (d > num_days)
+                d=1;
+            break;
+        case '-': 
+            d--;
+            if (d < 1)
+                d=num_days;
+            break;
+        default:
+            break;
+    }
+    setDay(d);
 }
