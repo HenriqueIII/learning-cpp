@@ -92,11 +92,10 @@ void funcA(){
 void funcB(){
     DateTime init = askTime("Tempo de Inicio");
     DateTime end =  askTime("Tempo de Fim:");
-    DateTime dt_dif = init.theTimeBetween(end);
-    /*
-    int hours = Time(long(seconds_between)).getHour();
-    int minutes = Time(long(seconds_between)).getMinute();
-    int seconds = Time(long(seconds_between)).getSecond();
+    Time time_dif = init.getTimeBetween(end);
+    int hours = time_dif.getHour();
+    int minutes = time_dif.getMinute();
+    int seconds = time_dif.getSecond();
     if(minutes || seconds)
         hours++;
     float prix=0;
@@ -108,7 +107,6 @@ void funcB(){
         else
             prix+=1;
     std::cout << "Pagamento de " << hours << "h corresponde a " << prix << "€" << std::endl;
-*/
 }
 
 int main(int argc, char ** argv){

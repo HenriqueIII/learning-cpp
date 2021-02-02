@@ -44,7 +44,8 @@ public:
     bool isValid(const char *);
     //Devolve o tempo entre duas DateTime
     DateTime theTimeBetween(DateTime &);
-    
+    //Devolve um objecto Time com a diferença
+    Time getTimeBetween(DateTime &);
     bool isEqual(DateTime &); // Retorna TRUE se forem iguais
     bool isLess(DateTime &);    // Retorna TRUE se *this for menor
 };
@@ -183,6 +184,39 @@ DateTime DateTime::theTimeBetween(DateTime & other){
     long secs_between=t.theTimeBetween(__end->getTime());
     Time dif(secs_between);
     return DateTime(aux,dif);
+}
+//Função que calcula o tempo em horas da diferença de tempo
+//Deverá receber uma diferença, não uma data
+Time DateTime::getTimeBetween(DateTime & other){
+    //Variaveis para construir o objecto Time
+    int h=0, m=0, s=0;
+    //Copia de objecto
+    DateTime dt1=*this;
+    DateTime dt2=other;
+    //Ponteiro para copia de objecto
+    DateTime * init = &dt1;
+    DateTime * end = &dt2;
+    //ordenar as datas
+    arrange(init, end);
+    //Numero de dias que medeiam ambas as datas
+    long days = end->getData().getDays(init->getData());
+    //Converter dias para horas
+    if (end->getTime().isLessThan(init->getTime()))
+        days--;
+    while(days--){
+        h+=24;
+    }
+    //ver quantas horas medeiam entre os tempos
+    Time aux = init->getTime();
+
+    while(aux.getHour() != end->getTime().getHour()){
+        h++;
+        aux.incHour();
+    }
+
+    Time res = init->getTime().theTimeBetween(end->getTime());
+    res.setHour(h,true);
+    return res;
 }
 void DateTime::arrange(DateTime *&dt1, DateTime *&dt2){
     if(dt2->isLess(*dt1)){

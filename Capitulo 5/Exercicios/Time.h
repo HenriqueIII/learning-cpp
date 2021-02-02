@@ -27,7 +27,7 @@ public:
     //Afectar os atributos recebendo uma string formatada
     void setTime(const char * s);
     void setTime(const Time &);
-    void setHour(int);
+    void setHour(int,bool);
     void setMinute(int);
     void setSecond(int);
     unsigned getHour() const;
@@ -40,6 +40,7 @@ public:
     bool isEqual(const Time&) const; // Retorna TRUE se forem iguais
     bool isLessThan(const Time & t); // Retorna TRUE se *this for menor que t
     bool isValid(char *);
+    void incHour();
 
 };
 //função que retorna o tempo actual em objecto Time
@@ -83,7 +84,7 @@ Time::Time(int hours, int minutes, int seconds){
         hours = 0;
     setSecond(seconds);
     setMinute(minutes);
-    setHour(hours);
+    setHour(hours,0);
 }
 //Construtor por cópia
 Time::Time(const Time & t){
@@ -126,9 +127,10 @@ void Time::setTime(const Time & t){
     second=t.second;
 }
 
-void Time::setHour(int h){
-    if(h>=24)
-        h=h%24;
+void Time::setHour(int h,bool ign=0){
+    if(!ign)
+        if(h>=24)
+            h=h%24;
     hour=h;
 }
 void Time::setMinute(int m){
@@ -215,6 +217,11 @@ bool Time::isValid(char * s){
 
     return true;
 
+}
+void Time::incHour(){
+    hour++;
+    if(hour==24)
+        hour=0;
 }
 
 bool validateTime(char * s){
