@@ -1,4 +1,8 @@
 #include <cstring>
+#include <iostream>
+#include <ios>
+
+static bool point=true;
 
 class String{
     char * p;   // Apontador para string
@@ -24,6 +28,7 @@ public:
     const char * getStr() const {return p;}
     // Retorna o tamanho da String
     int lenght() const          {return size-1;}
+    friend std::istream &operator>>( std::istream  &input, String &D );
 };
 void String::init(const char * s, int n){
     p = new char[size=n];
@@ -44,7 +49,7 @@ void String::operator=(const String & s){
     }
 }
 void String::operator=(const char * s){
-    init(s,strlen(s));
+    init(s,strlen(s)+1);
 }
 void String::concate(const String & s){
     int newsize = lenght() + s.lenght();
@@ -57,4 +62,26 @@ void String::concate(const String & s){
 }
 bool String::isEqual(const String & other){
     return !strcmp(p, other.p);
+}
+
+std::istream &operator>>( std::istream  &input, String &D ){
+    char c;
+    while((c=input.get())==' ');
+    input.putback(c);
+    while(c=input.get()){
+        if(point){
+            if (strchr("\n\t ",c))
+                break;
+        }else{
+           if (strchr("\n\t .,",c))
+                break;
+        } 
+        if (c == EOF){
+            input.setstate(std::ios::eofbit);
+            break;
+        }
+        char d[2]={c};
+        D.concate(d);
+    }
+    return input;
 }
