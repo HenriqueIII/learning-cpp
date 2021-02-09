@@ -1,20 +1,26 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
+#include <curses.h>
 
 class Display{
-    
+    int foreground, background;
+    WINDOW * my_win;
 public:
     enum {
         // Cores escuras
-        BLACK,BLUE,GREEN,CYAN,RED,MAGENTA,BROWN,DARKGRAY,
+        BLACK=0,RED,GREEN,YELLOW,BLUE,MAGENTA,CYAN,WHITE,
         // Cores claras
-        LIGHTGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN,
-        LIGHTRED, LIGHTMAGENTA, YELLOW, WHITE
+        BBLACK=8,BRED,BGREEN,BYELLOW,BBLUE,BMAGENTA,BCYAN,BWHITE
     };
-    enum {MIN_X=0,MIN_Y=0,MAX_X=79,MAX_Y=49};
-
-    // Programar a carta de video em modo texto 80x50, 16 cores e ocultar o cursor.
+    enum {MIN_X=0,MIN_Y=0,MAX_X=79,MAX_Y=24};
+    // Programar a carta de video em modo texto 80x25, 8 cores e ocultar o cursor.
     Display();
+    // Iniciar os pares das cores.
+    void initColor();
+    // Converte numeros para cores do curses
+    short curs_color(int fg);
+    // Converte num número previsivel de par de cor
+    int colornum(int fg, int bg);
     // Alterar a cor dos caracteres a escrever, para uma das 16 cores disponiveis.
     void setForeground(int color);
     // Alterar a cor de fundo dos caracteres, para uma das 16 cores disponiveis.
@@ -30,8 +36,13 @@ public:
     // Escrever o caracter chr no ponto de coordenadas (x,y) com a cor col.
     void putc(int x, int y, int chr, int col = WHITE);
     // Escrever a string str com inicio na posição corrente do cursor.
-    void puts( char * str);
+    void puts(const char * str);
+    // Limpar a window
+    void windowClear();
     // Repor a placa de video no estado em que se encontrava, com o cursor visivel.
+    WINDOW * getWindow(){
+        return my_win;
+    }
     ~Display();
 };
 

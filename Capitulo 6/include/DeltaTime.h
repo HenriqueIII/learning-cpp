@@ -17,11 +17,11 @@ public:
     void start(){
         init = clock();
     }
-    bool timeout(){
+    bool dttimeout(){
         return clock() - init >= delta; 
     }
     void wait(){
-        while ( ! timeout());
+        while ( ! dttimeout());
     }
 };
 
