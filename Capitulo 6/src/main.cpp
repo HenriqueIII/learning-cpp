@@ -1,4 +1,4 @@
-#include "Point.h"
+#include <Point.h>
 #include "Random.h"
 #include <iostream>
 #include "Display.h"
@@ -10,12 +10,12 @@ int main(int argc, char ** argv){
     Point max(Display::MAX_X - sizeof(msg), Display::MAX_Y);
     DeltaTime delta(0.5);
     int color;
-    Point pos;
+    Point pos; 
     kbd.setMode(Keyboard::VIEW);
     while(kbd.get() == KEY_NONE){
         delta.start();
         pos = Random::get(Point(0,0), max);
-        color = Random::get(Display::RED, Display::BWHITE);
+        color = Random::get(Display::BLACK, Display::WHITE);
         //Aparece
         dsp.setForeground(color);
         dsp.setCursor(pos.getX(), pos.getY());

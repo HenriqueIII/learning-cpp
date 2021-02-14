@@ -3,9 +3,16 @@ CXX_FLAGS := -std=c++17 -ggdb
 
 BIN     := bin
 SRC     := src
-INCLUDE := include
+INCLUDE := 
 
-LIBRARIES   :=
+LIBRARIES   := lib
+#lib/libncurses.so \
+	lib/libPoint.so \
+	lib/libRandom.so \
+	lib/libDisplay.so \
+	lib/libKeyboard.so \
+	lib/libDeltaTime.so
+
 EXECUTABLE  := main
 
 
@@ -16,7 +23,8 @@ run: clean all
 	./$(BIN)/$(EXECUTABLE)
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $@ -lncurses $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) $(INCLUDE) $^ -o $@ -L$(LIBRARIES) -Wl,-rpath=$(LIBRARIES)/ \
+	-lncurses -lPoint -lRandom -lDisplay -lKeyboard -lDeltaTime
 
 clean:
 	-rm $(BIN)/*
