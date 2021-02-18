@@ -3,6 +3,7 @@
 
 #include <Person.h>
 #include <Monsters.h>
+#include <cstring>
 
 class Game{
     enum ExitType {GAME_OVER, MONSTERS_DEAD, PERSON_DEAD};
@@ -11,6 +12,7 @@ class Game{
     ExitType play();
 public:
     Game(int n=10);
+    ~Game();
     void run();
 };
 

@@ -2,6 +2,8 @@
 #define PERSON_H
 
 #include <Point.h>
+#include <Display.h>
+#include <Random.h>
 
 class Person{
     // Coordenadas correntes do player.

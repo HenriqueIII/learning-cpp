@@ -1,6 +1,11 @@
 #include <iostream>
-#include <Game.h>
+#include "Game.h"
+#include "Display.h"
+#include "Keyboard.h"
 
-int main(int argc, char ** argv){
+Game game;
+
+int main(){
+    game.run();
     return 0;
 }
